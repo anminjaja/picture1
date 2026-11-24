@@ -1,6 +1,6 @@
-// 1. Firebase 및 Firestore 기능만 불러오기
+// 1. Firebase 및 Firestore 기능 불러오기 (doc, updateDoc, deleteDoc 추가)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
 // 2. 공공데이터포털 인증키 (Encoding 키 입력)
 const SERVICE_KEY = "bd21b12db0e288c3985b09ce34dad04c43e57ea2693be743697926278f106d4d";
@@ -79,7 +79,7 @@ document.getElementById("refresh-btn").addEventListener("click", () => {
 });
 
 // ==========================================
-// [기능 2] 로그인 없이 Firestore에 바로 저장
+// [기능 2] Firestore에 감상 저장 (Create)
 // ==========================================
 document.getElementById("save-btn").addEventListener("click", async () => {
   const commentText = document.getElementById("comment-input").value.trim();
@@ -96,7 +96,7 @@ document.getElementById("save-btn").addEventListener("click", async () => {
       createdAt: serverTimestamp()
     });
 
-    alert("Firestore에 감상이 저장되었습니다!");
+    alert("Firestore에 저장되었습니다!");
     resetSelection();
     document.querySelectorAll(".card").forEach((c) => c.classList.remove("selected"));
   } catch (error) {
@@ -106,7 +106,38 @@ document.getElementById("save-btn").addEventListener("click", async () => {
 });
 
 // ==========================================
-// [기능 3] Firestore에서 감상 실시간 조회
+// [기능 3] 감상 수정(Update) 및 삭제(Delete) 함수
+// ==========================================
+async function editReview(docId, oldComment) {
+  const newComment = prompt("수정할 한 줄 감상을 입력하세요:", oldComment);
+  // 취소를 눌렀거나 빈 칸이면 중단
+  if (newComment === null || newComment.trim() === "") return;
+
+  try {
+    const reviewRef = doc(db, "reviews", docId);
+    await updateDoc(reviewRef, {
+      comment: newComment.trim()
+    });
+  } catch (error) {
+    console.error("수정 실패:", error);
+    alert("수정 중 오류가 발생했습니다: " + error.message);
+  }
+}
+
+async function deleteReview(docId) {
+  if (!confirm("정말 이 감상을 삭제하시겠습니까?")) return;
+
+  try {
+    const reviewRef = doc(db, "reviews", docId);
+    await deleteDoc(reviewRef);
+  } catch (error) {
+    console.error("삭제 실패:", error);
+    alert("삭제 중 오류가 발생했습니다: " + error.message);
+  }
+}
+
+// ==========================================
+// [기능 4] Firestore에서 감상 실시간 조회 (Read)
 // ==========================================
 const reviewList = document.getElementById("review-list");
 const q = query(collection(db, "reviews"), orderBy("createdAt", "desc"));
@@ -118,8 +149,10 @@ onSnapshot(q, (snapshot) => {
     return;
   }
 
-  snapshot.forEach((doc) => {
-    const data = doc.data();
+  snapshot.forEach((docSnapshot) => {
+    const data = docSnapshot.data();
+    const docId = docSnapshot.id; // 각 문서의 고유 ID
+
     const li = document.createElement("li");
     li.className = "review-item";
     li.innerHTML = `
@@ -128,7 +161,16 @@ onSnapshot(q, (snapshot) => {
         <div class="review-title">[${data.photoTitle}]</div>
         <div class="review-comment">${data.comment}</div>
       </div>
+      <div class="review-actions">
+        <button class="btn-sm btn-edit">수정</button>
+        <button class="btn-sm btn-delete">삭제</button>
+      </div>
     `;
+
+    // 수정·삭제 버튼 클릭 이벤트 연결
+    li.querySelector(".btn-edit").addEventListener("click", () => editReview(docId, data.comment));
+    li.querySelector(".btn-delete").addEventListener("click", () => deleteReview(docId));
+
     reviewList.appendChild(li);
   });
 });
