@@ -84,3 +84,22 @@ body {
 }
 .review-list { list-style: none; }
 .empty-msg { color: #888; font-size: 14px; }
+/* 저장된 감상 카드 스타일 */
+.review-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+}
+.review-item:last-child { border-bottom: none; }
+.review-item img {
+  width: 64px;
+  height: 64px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+.review-content { flex: 1; }
+.review-title { font-size: 14px; font-weight: 700; color: #2563eb; margin-bottom: 4px; }
+.review-comment { font-size: 15px; color: #222; margin-bottom: 4px; }
+.review-author { font-size: 12px; color: #888; }
