@@ -1,4 +1,4 @@
-// 1. Firebase 및 Firestore 기능 불러오기
+// 1. Firebase 및 Firestore 기능만 불러오기
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
@@ -79,7 +79,7 @@ document.getElementById("refresh-btn").addEventListener("click", () => {
 });
 
 // ==========================================
-// [기능 2] Firestore에 감상 저장 (Create)
+// [기능 2] 로그인 없이 Firestore에 바로 저장
 // ==========================================
 document.getElementById("save-btn").addEventListener("click", async () => {
   const commentText = document.getElementById("comment-input").value.trim();
@@ -89,7 +89,6 @@ document.getElementById("save-btn").addEventListener("click", async () => {
   }
 
   try {
-    // Firestore의 'reviews' 컬렉션에 새 문서 저장
     await addDoc(collection(db, "reviews"), {
       photoTitle: selectedPhoto.title,
       photoUrl: selectedPhoto.imgUrl,
@@ -97,7 +96,7 @@ document.getElementById("save-btn").addEventListener("click", async () => {
       createdAt: serverTimestamp()
     });
 
-    alert("Firestore에 저장되었습니다!");
+    alert("Firestore에 감상이 저장되었습니다!");
     resetSelection();
     document.querySelectorAll(".card").forEach((c) => c.classList.remove("selected"));
   } catch (error) {
@@ -107,7 +106,7 @@ document.getElementById("save-btn").addEventListener("click", async () => {
 });
 
 // ==========================================
-// [기능 3] Firestore에서 감상 실시간 조회 (Read)
+// [기능 3] Firestore에서 감상 실시간 조회
 // ==========================================
 const reviewList = document.getElementById("review-list");
 const q = query(collection(db, "reviews"), orderBy("createdAt", "desc"));
