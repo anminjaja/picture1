@@ -103,3 +103,18 @@ body {
 .review-title { font-size: 14px; font-weight: 700; color: #2563eb; margin-bottom: 4px; }
 .review-comment { font-size: 15px; color: #222; margin-bottom: 4px; }
 .review-author { font-size: 12px; color: #888; }
+/* 수정 및 삭제 버튼 영역 */
+.review-actions {
+  display: flex;
+  gap: 6px;
+}
+.btn-sm {
+  padding: 5px 10px;
+  font-size: 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 1px solid #d1d5db;
+  background: #fff;
+}
+.btn-edit:hover { background: #eff6ff; color: #2563eb; border-color: #2563eb; }
+.btn-delete:hover { background: #fef2f2; color: #dc2626; border-color: #dc2626; }
