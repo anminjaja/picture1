@@ -1,10 +1,11 @@
-// 1. Firebase SDK 불러오기 (Firestore만 사용)
+// 1. Firebase 및 Firestore 기능 불러오기
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-// 2. 내 설정값 입력 (공공데이터 인코딩키만 넣어주세요!)
+// 2. 공공데이터포털 인증키 (Encoding 키 입력)
 const SERVICE_KEY = "bd21b12db0e288c3985b09ce34dad04c43e57ea2693be743697926278f106d4d";
 
+// 3. 본인 Firebase 프로젝트 설정 정보
 const firebaseConfig = {
   apiKey: "AIzaSyD2DHKV4ZaPxNj6VRtMcH87p2IuvKdijTI",
   authDomain: "picture-6c79f.firebaseapp.com",
@@ -14,14 +15,14 @@ const firebaseConfig = {
   appId: "1:621068352095:web:a2131cb7752d4805afb9ea"
 };
 
-// 3. Firebase 초기화
+// 4. Firebase 및 Firestore 초기화
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-let selectedPhoto = null; // 현재 선택한 사진 정보
+let selectedPhoto = null;
 
 // ==========================================
-// [기능 A] 공공데이터포털 여행 사진 불러오기
+// [기능 1] 관광사진 API 불러오기 및 선택
 // ==========================================
 async function loadPhotos(pageNo = 1) {
   const container = document.getElementById("photo-list");
@@ -78,7 +79,7 @@ document.getElementById("refresh-btn").addEventListener("click", () => {
 });
 
 // ==========================================
-// [기능 B] 로그인 없이 Firestore에 바로 저장하기
+// [기능 2] Firestore에 감상 저장 (Create)
 // ==========================================
 document.getElementById("save-btn").addEventListener("click", async () => {
   const commentText = document.getElementById("comment-input").value.trim();
@@ -88,25 +89,25 @@ document.getElementById("save-btn").addEventListener("click", async () => {
   }
 
   try {
+    // Firestore의 'reviews' 컬렉션에 새 문서 저장
     await addDoc(collection(db, "reviews"), {
-      author: "익명 여행자",
       photoTitle: selectedPhoto.title,
       photoUrl: selectedPhoto.imgUrl,
       comment: commentText,
       createdAt: serverTimestamp()
     });
 
-    alert("Firebase에 감상이 저장되었습니다!");
+    alert("Firestore에 저장되었습니다!");
     resetSelection();
     document.querySelectorAll(".card").forEach((c) => c.classList.remove("selected"));
   } catch (error) {
-    console.error("저장 실패:", error);
-    alert("저장 중 오류가 발생했습니다: " + error.message);
+    console.error("Firestore 저장 실패:", error);
+    alert("저장 오류: " + error.message);
   }
 });
 
 // ==========================================
-// [기능 C] Firestore에서 저장된 감상 실시간 조회
+// [기능 3] Firestore에서 감상 실시간 조회 (Read)
 // ==========================================
 const reviewList = document.getElementById("review-list");
 const q = query(collection(db, "reviews"), orderBy("createdAt", "desc"));
@@ -114,7 +115,7 @@ const q = query(collection(db, "reviews"), orderBy("createdAt", "desc"));
 onSnapshot(q, (snapshot) => {
   reviewList.innerHTML = "";
   if (snapshot.empty) {
-    reviewList.innerHTML = `<li class="empty-msg">아직 등록된 여행 감상이 없습니다. 첫 감상을 남겨보세요!</li>`;
+    reviewList.innerHTML = `<li class="empty-msg">아직 저장된 감상이 없습니다. 첫 감상을 남겨보세요!</li>`;
     return;
   }
 
@@ -127,12 +128,11 @@ onSnapshot(q, (snapshot) => {
       <div class="review-content">
         <div class="review-title">[${data.photoTitle}]</div>
         <div class="review-comment">${data.comment}</div>
-        <div class="review-author">작성자: ${data.author || "익명"}</div>
       </div>
     `;
     reviewList.appendChild(li);
   });
 });
 
-// 초기 실행
+// 첫 화면 사진 5장 로드
 loadPhotos(1);
