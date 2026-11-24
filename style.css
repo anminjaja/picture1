@@ -1,0 +1,86 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: #f5f7fa;
+  color: #222;
+  padding: 30px 20px;
+}
+.container { max-width: 1100px; margin: 0 auto; }
+
+/* 상단 헤더 */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e1e4e8;
+}
+.header h1 { font-size: 24px; margin-bottom: 6px; }
+.subtitle { font-size: 14px; color: #666; }
+
+/* 버튼 공통 */
+.btn {
+  padding: 9px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: 0.2s;
+}
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-primary { background: #2563eb; color: #fff; }
+.btn-primary:hover:not(:disabled) { background: #1d4ed8; }
+.btn-secondary { background: #fff; color: #333; border: 1px solid #d1d5db; }
+.btn-secondary:hover { background: #f3f4f6; }
+.btn-outline { background: transparent; border: 1px solid #2563eb; color: #2563eb; }
+
+/* 툴바 & 사진 그리드 */
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.badge { font-weight: 700; font-size: 16px; }
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  cursor: pointer;
+  transition: transform 0.2s, border-color 0.2s;
+}
+.card:hover { transform: translateY(-4px); }
+.card.selected { border-color: #2563eb; background: #eff6ff; }
+.card img { width: 100%; height: 150px; object-fit: cover; display: block; }
+.card h3 { font-size: 15px; padding: 12px; text-align: center; word-break: keep-all; }
+
+/* 감상 입력 및 목록 박스 */
+.review-box, .feed-box {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  margin-bottom: 20px;
+}
+.review-box h2, .feed-box h2 { font-size: 17px; margin-bottom: 10px; }
+.selected-info { font-size: 14px; color: #2563eb; font-weight: 600; margin-bottom: 12px; }
+.input-group { display: flex; gap: 10px; }
+.input-group input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+}
+.review-list { list-style: none; }
+.empty-msg { color: #888; font-size: 14px; }
