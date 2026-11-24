@@ -11,24 +11,19 @@
     <header class="header">
       <div>
         <h1>오늘의 여행 사진 한 컷</h1>
-        <p class="subtitle">마음에 드는 여행 사진을 클릭하고 한 줄 감상을 남겨보세요.</p>
-      </div>
-      <!-- 로그인 버튼 영역 (2단계에서 연결 예정) -->
-      <div id="auth-box">
-        <button id="login-btn" class="btn btn-outline">로그인 (2단계 예정)</button>
+        <p class="subtitle">마음에 드는 여행 사진을 클릭하고 한 줄 감상을 Firestore에 바로 저장해 보세요.</p>
       </div>
     </header>
 
-    <!-- 사진 목록 상단 컨트롤 바 -->
     <div class="toolbar">
       <span class="badge">추천 여행지 5선</span>
       <button id="refresh-btn" class="btn btn-secondary">🔄 다른 사진 불러오기</button>
     </div>
 
-    <!-- API 사진 5장이 들어갈 영역 -->
+    <!-- API 사진 5장 출력 영역 -->
     <div id="photo-list" class="card-grid">불러오는 중...</div>
 
-    <!-- 선택한 사진에 한 줄 감상 남기기 영역 -->
+    <!-- 한 줄 감상 입력 영역 -->
     <section class="review-box">
       <h2>✍️ 선택한 사진 한 줄 감상</h2>
       <p id="selected-photo-title" class="selected-info">위에서 사진 1장을 먼저 클릭해 주세요.</p>
@@ -38,11 +33,11 @@
       </div>
     </section>
 
-    <!-- 저장된 감상 목록 영역 (2단계 Firestore 조회 결과) -->
+    <!-- Firestore에서 조회한 감상 목록 -->
     <section class="feed-box">
-      <h2>📌 기록된 여행 감상</h2>
+      <h2>📌 Firestore에 기록된 여행 감상</h2>
       <ul id="review-list" class="review-list">
-        <li class="empty-msg">2단계에서 Firebase를 연결하면 저장된 감상이 여기에 표시됩니다.</li>
+        <li class="empty-msg">데이터를 불러오는 중...</li>
       </ul>
     </section>
   </div>
