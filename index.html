@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>오늘의 여행 사진 한 컷</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div>
+        <h1>오늘의 여행 사진 한 컷</h1>
+        <p class="subtitle">마음에 드는 여행 사진을 클릭하고 한 줄 감상을 남겨보세요.</p>
+      </div>
+      <!-- 로그인 버튼 영역 (2단계에서 연결 예정) -->
+      <div id="auth-box">
+        <button id="login-btn" class="btn btn-outline">로그인 (2단계 예정)</button>
+      </div>
+    </header>
+
+    <!-- 사진 목록 상단 컨트롤 바 -->
+    <div class="toolbar">
+      <span class="badge">추천 여행지 5선</span>
+      <button id="refresh-btn" class="btn btn-secondary">🔄 다른 사진 불러오기</button>
+    </div>
+
+    <!-- API 사진 5장이 들어갈 영역 -->
+    <div id="photo-list" class="card-grid">불러오는 중...</div>
+
+    <!-- 선택한 사진에 한 줄 감상 남기기 영역 -->
+    <section class="review-box">
+      <h2>✍️ 선택한 사진 한 줄 감상</h2>
+      <p id="selected-photo-title" class="selected-info">위에서 사진 1장을 먼저 클릭해 주세요.</p>
+      <div class="input-group">
+        <input type="text" id="comment-input" placeholder="이 여행지에 대한 한 줄 감상을 입력하세요..." disabled />
+        <button id="save-btn" class="btn btn-primary" disabled>감상 저장</button>
+      </div>
+    </section>
+
+    <!-- 저장된 감상 목록 영역 (2단계 Firestore 조회 결과) -->
+    <section class="feed-box">
+      <h2>📌 기록된 여행 감상</h2>
+      <ul id="review-list" class="review-list">
+        <li class="empty-msg">2단계에서 Firebase를 연결하면 저장된 감상이 여기에 표시됩니다.</li>
+      </ul>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
